@@ -13,7 +13,13 @@
 
   <body>
 
-    <%= yield %>
+    <div class="row">
+      <div class="large-12.columns">
+        <%= render 'layouts/nav' %>
+        <%= yield %>
+      </div>
+    </div>
+
     <%= javascript_include_tag "application" %>
   </body>
 </html>
