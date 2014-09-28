@@ -19,7 +19,17 @@ class F1
     get_time_and_uid
     @oauth_signature = secret + @oauth_token_secret
     @authorization_header = "OAuth oauth_version='1.0',oauth_token='#{oauth_token}',oauth_nonce='#{@uid}',oauth_timestamp='#{@time}',oauth_consumer_key='#{key}',oauth_signature_method='PLAINTEXT',oauth_signature='#{@oauth_signature}'"
+    JSON.parse(popen_get)
+  end
+
+  def search(str = "jwarren")
+    str = URI.encode(str)
+    @url = "https://#{@church_code}.#{@env}.fellowshiponeapi.com/v1/People/Search?searchFor=#{str}"
+    get_time_and_uid
+    @oauth_signature = secret + @oauth_token_secret
+    @authorization_header = "OAuth oauth_version='1.0',oauth_token='#{oauth_token}',oauth_nonce='#{@uid}',oauth_timestamp='#{@time}',oauth_consumer_key='#{key}',oauth_signature_method='PLAINTEXT',oauth_signature='#{@oauth_signature}'"
     popen_get
+    # returns an xml string, but no results
   end
 
   private
@@ -39,8 +49,7 @@ class F1
 
   def popen_get
     @string = "curl --header 'Authorization: #{@authorization_header}' #{@url}"
-    resp = IO.popen(@string).readlines.first
-    JSON.parse(resp)
+    IO.popen(@string).readlines.first
   end
 
   def excon_get
