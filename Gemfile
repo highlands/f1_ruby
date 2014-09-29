@@ -14,6 +14,13 @@ gem 'coffee-rails', '~> 4.0.0'
 # See https://github.com/sstephenson/execjs#readme for more supported runtimes
 # gem 'therubyracer',  platforms: :ruby
 
+gem 'haml'
+gem 'foundation-rails'
+gem 'pry'
+
+gem 'rspec-rails'
+gem 'capybara'
+
 # Use jquery as the JavaScript library
 gem 'jquery-rails'
 # Turbolinks makes following links in your web application faster. Read more: https://github.com/rails/turbolinks
@@ -37,10 +44,12 @@ gem 'sdoc', '~> 0.4.0',          group: :doc
 
 # Use debugger
 # gem 'debugger', group: [:development, :test]
+#
 
-gem 'haml'
-
-gem 'rspec-rails'
-gem 'capybara'
-gem 'pry'
-gem 'foundation-rails'
+#gem 'rest_client'
+#gem 'typhoeus'
+#gem 'httparty'
+#gem 'faraday'
+#gem 'excon'
+#gem 'curb'
+#gem 'patron'
