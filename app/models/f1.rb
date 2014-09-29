@@ -1,6 +1,6 @@
 class F1
 
-  attr_accessor :url, :signature, :data, :key, :secret, :time, :uid, :authorization_header, :string, :oauth_token_secret, :oauth_token, :church_code, :env, :user_link
+  attr_accessor :url, :signature, :data, :key, :secret, :time, :uid, :authorization_header, :string, :oauth_token_secret, :oauth_token, :church_code, :env, :user_link, :errors
 
   def initialize(username = nil, password = nil, church_code = "chbhmal", env = "staging")
     @church_code = church_code
@@ -34,10 +34,15 @@ class F1
 
   def authenticate
     resp = popen
-    tokens = resp.last.split("&").map{|s| { s.split("=").first => s.split("=").last } }
-    @oauth_token = tokens.first.merge(tokens.last)["oauth_token"]
-    @oauth_token_secret = tokens.first.merge(tokens.last)["oauth_token_secret"]
-    @user_link = resp.select{|s| s.match(/Content-Location:/) }.first.split(": ").last.gsub(/\r\n/, "")
+    if resp.last.match(/oauth/).present?
+      tokens = resp.last.split("&").map{|s| { s.split("=").first => s.split("=").last } }
+      @oauth_token = tokens.first.merge(tokens.last)["oauth_token"]
+      @oauth_token_secret = tokens.first.merge(tokens.last)["oauth_token_secret"]
+      @user_link = resp.select{|s| s.match(/Content-Location:/) }.first.split(": ").last.gsub(/\r\n/, "")
+      @errors = nil
+    else
+      @errors = resp.last
+    end
   end
 
   def popen
