@@ -4,11 +4,11 @@ class SessionsController < ApplicationController
   end
 
   def create
-    resp = F1.new(params[:user][:username], params[:user][:password])
-    if resp.oauth_token.present? && resp.oauth_token_secret.present?
-      session[:oauth_token] = resp.oauth_token
-      session[:oauth_token_secret] = resp.oauth_token_secret
-      session[:current_user] = params[:user][:username]
+    connection = F1.new(params[:user][:username], params[:user][:password])
+    if connection.oauth_token.present? && connection.oauth_token_secret.present?
+      session[:oauth_token] = connection.oauth_token
+      session[:oauth_token_secret] = connection.oauth_token_secret
+      session[:current_user] = connection.get_person["person"]
       redirect_to root_path
     else
       destroy
