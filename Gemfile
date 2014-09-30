@@ -20,3 +20,6 @@ gem 'rspec-rails'
 gem 'capybara'
 
 gem 'activerecord-session_store', github: 'rails/activerecord-session_store'
+gem 'rails_12factor', group: :production
+
+ruby "2.1.1"
