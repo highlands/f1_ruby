@@ -11,8 +11,8 @@
     / Right Nav Section
     %ul.right
       %li.divider
-      - if current_user
-        %li= link_to 'Sign Out', destroy_session_path
+      - if f1_current_user
+        %li= link_to 'Sign Out', destroy_f1_session_path
       - else
-        %li= link_to 'Sign In', new_user_session_path
+        %li= link_to 'Sign In', new_f1_user_session_path
 

@@ -1,19 +1,18 @@
-
-- if current_user
+- if f1_current_user
   %h1
     Welcome
-    = current_user["firstName"]
+    = f1_current_user["firstName"]
     !
   %h4 You are currently logged in via Fellowship One
   .panel
-    - current_user.each do |k,v|
+    - f1_current_user.each do |k,v|
       = "#{k}: #{v}"
       %p
 - else
   %h3 Sign in Here:
   .row
     .large-6.columns
-      = form_tag new_user_session_path do
+      = form_tag new_f1_user_session_path do
         = label_tag :username
         = text_field_tag "user[username]"
         = label_tag :password

@@ -5,9 +5,9 @@ Rails.application.routes.draw do
   # You can have the root of your site routed with "root"
   root 'home#index'
 
-  get "new_user_session" => "sessions#new"
-  get "destroy_session" => "sessions#destroy"
-  post "new_user_session" => "sessions#create"
+  get "new_f1_user_session" => "sessions#new"
+  post "new_f1_user_session" => "sessions#create"
+  get "destroy_f1_session" => "sessions#destroy"
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'

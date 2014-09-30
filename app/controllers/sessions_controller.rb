@@ -12,7 +12,7 @@ class SessionsController < ApplicationController
       if connection.oauth_token.present? && connection.oauth_token_secret.present?
         session[:oauth_token] = connection.oauth_token
         session[:oauth_token_secret] = connection.oauth_token_secret
-        session[:current_user] = connection.get_person["person"]
+        session[:f1_current_user] = connection.get_person["person"]
         redirect_to root_path
       else
         destroy
@@ -21,7 +21,7 @@ class SessionsController < ApplicationController
   end
 
   def destroy
-    session[:current_user] = session[:oauth_token] = session[:oauth_token_secret] = nil
+    session[:f1_current_user] = session[:oauth_token] = session[:oauth_token_secret] = nil
     redirect_to root_path
   end
 
