@@ -6,13 +6,10 @@ class F1
     @church_code = church_code
     @env = env
     @url = "https://#{@church_code}.#{@env}.fellowshiponeapi.com/v1/PortalUser/AccessToken"
-    @signature = URI.encode(Base64.encode64("#{username} #{password}"))
-    @data = "ec=" + @signature
-    @key = ENV["F1_KEY"]
-    @secret = ENV["F1_SECRET"] + "%2526"
+    encode_credentials(username, password)
+    set_keys
     get_time_and_uid
-    @authorization_header = "OAuth oauth_version='1.0',oauth_nonce='#{@uid}',oauth_timestamp='#{@time}',oauth_consumer_key='#{@key}',oauth_signature_method='PLAINTEXT',oauth_signature='#{@secret}'"
-    @string = "curl -i --data '#{@data}' #{@url} -H 'Authorization: #{@authorization_header}'"
+    set_auth
     authenticate
   end
 
@@ -27,9 +24,24 @@ class F1
 
   private
 
+  def encode_credentials(username, password)
+    @signature = URI.encode(Base64.encode64("#{username} #{password}"))
+    @data = "ec=" + @signature
+  end
+
+  def set_keys
+    @key = ENV["F1_KEY"]
+    @secret = ENV["F1_SECRET"] + "%2526"
+  end
+
   def get_time_and_uid
     @time = Time.now.to_i
     @uid = SecureRandom.uuid
+  end
+
+  def set_auth
+    @authorization_header = "OAuth oauth_version='1.0',oauth_nonce='#{@uid}',oauth_timestamp='#{@time}',oauth_consumer_key='#{@key}',oauth_signature_method='PLAINTEXT',oauth_signature='#{@secret}'"
+    @string = "curl -i --data '#{@data}' #{@url} -H 'Authorization: #{@authorization_header}'"
   end
 
   def authenticate
