@@ -1,25 +1,16 @@
-source 'https://rubygems.org'
+source "https://rubygems.org"
 
-# Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '4.1.4'
+# Declare your gem's dependencies in f1.gemspec.
+# Bundler will treat runtime dependencies like base dependencies, and
+# development dependencies will be added by default to the :development group.
+gemspec
 
-gem 'pg'
+# Declare any dependencies that are still in development here instead of in
+# your gemspec. These might include edge Rails or gems from your path or
+# Git. Remember to move these dependencies to your gemspec before releasing
+# your gem to rubygems.org.
 
-gem 'sass-rails', '~> 4.0.3'
-gem 'uglifier', '>= 1.3.0'
-gem 'coffee-rails', '~> 4.0.0'
-gem 'jquery-rails'
-gem 'jbuilder', '~> 2.0'
-gem 'sdoc', '~> 0.4.0',          group: :doc
-
-gem 'haml'
-gem 'foundation-rails'
-gem 'pry'
-
-gem 'rspec-rails'
-gem 'capybara'
-
-gem 'activerecord-session_store', github: 'rails/activerecord-session_store'
-gem 'rails_12factor', group: :production
-
-ruby "2.1.1"
+# To use debugger
+# gem 'debugger'
+gem "rspec-rails", "~> 2.12.2"
+gem "factory_girl_rails", "~> 4.0"
