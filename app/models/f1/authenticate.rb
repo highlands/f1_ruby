@@ -22,6 +22,8 @@ module F1
       else
         @errors = resp.last
       end
+    rescue
+      @errors = "Connection Failed"
     end
 
     def get_person

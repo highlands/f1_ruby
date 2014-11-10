@@ -8,5 +8,7 @@ class F1::ApplicationController < ActionController::Base
     else
       return false
     end
+  rescue
+    return false
   end
 end
