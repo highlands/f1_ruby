@@ -17,7 +17,6 @@ module F1
         if connection.oauth_token.present? && connection.oauth_token_secret.present?
           cookies[:coth_oauth_token] = connection.oauth_token
           cookies[:coth_oauth_token_secret] = connection.oauth_token_secret
-          cookies[:f1_user] = params[:user][:username]
           session[:f1_current_user] = connection.get_person["person"]
           update_user
           redirect_to f1.root_path
@@ -46,6 +45,7 @@ module F1
       user.url = session[:f1_current_user]["@uri"]
       user.last_sign_in_ip = request.remote_ip
       user.save
+      cookies[:f1_user_id] = user.id
     end
 
   end
