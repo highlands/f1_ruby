@@ -33,6 +33,7 @@ module F1
     end
 
     def show
+      destroy unless validate_user
     end
 
     private
