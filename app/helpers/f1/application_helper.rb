@@ -13,7 +13,11 @@ module F1
     end
 
     def f1_username
-      cookies["f1_user"].present? ? cookies["f1_user"] : "Back"
+      if cookies["f1_user"].present?
+        cookies["f1_user"]
+      else
+        redirect_to  destroy_f1_session_path
+      end
     end
 
   end
