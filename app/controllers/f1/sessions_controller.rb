@@ -1,6 +1,7 @@
 module F1
   class SessionsController < F1::ApplicationController
     include F1::ApplicationHelper
+    before_filter :verify_user, :only => [:show]
 
     def new
       if f1_current_user
@@ -27,15 +28,21 @@ module F1
     end
 
     def destroy
-      session[:f1_current_user] = cookies[:coth_oauth_token] = cookies[:coth_oauth_token_secret] = nil
+      session[:f1_current_user] = cookies[:coth_oauth_token] = cookies[:coth_oauth_token_secret] = cookies[:f1_user_id] = nil
       redirect_to root_path
     end
 
     def show
-      destroy unless validate_user
     end
 
     private
+
+    def verify_user
+      unless validate_user
+        flash[:alert] = "You must be logged in to do that"
+        destroy
+      end
+    end
 
     def update_user
       user = F1::User.find_or_create_by(username: params[:user][:username])

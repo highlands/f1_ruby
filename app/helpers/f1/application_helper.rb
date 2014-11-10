@@ -1,8 +1,21 @@
 module F1
   module ApplicationHelper
 
+    def validate_user
+      user_id = F1::User.find(cookies[:f1_user_id]).id
+      if F1::Authenticate.get_details(user_id)
+        return true
+      else
+        return false
+      end
+    rescue
+      return false
+    end
+
     def current_user
-      F1::User.find(cookies[:f1_user_id]).present? ? F1::User.find(cookies[:f1_user_id]) : nil
+      F1::User.find(cookies[:f1_user_id])
+    rescue
+      nil
     end
 
     def f1_current_user
