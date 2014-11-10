@@ -42,6 +42,7 @@ module F1
       user.id = session[:f1_current_user]["@id"].to_i
       user.token = cookies[:coth_oauth_token]
       user.secret = cookies[:coth_oauth_token_secret]
+      user.url = session[:f1_current_user]["@uri"]
       user.last_sign_in_ip = request.remote_ip
       user.save
     end
