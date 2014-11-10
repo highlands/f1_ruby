@@ -19,7 +19,7 @@ module F1
           cookies[:coth_oauth_token_secret] = connection.oauth_token_secret
           cookies[:f1_user] = params[:user][:username]
           session[:f1_current_user] = connection.get_person["person"]
-          validate_user
+          update_user
           redirect_to f1.root_path
         else
           destroy
@@ -37,7 +37,7 @@ module F1
 
     private
 
-    def validate_user
+    def update_user
       user = F1::User.find_or_create_by(username: params[:user][:username])
       user.id = session[:f1_current_user]["@id"].to_i
       user.token = cookies[:coth_oauth_token]
