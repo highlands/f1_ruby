@@ -1,7 +1,7 @@
 module F1
   class SessionsController < F1::ApplicationController
     include F1::ApplicationHelper
-    before_filter :verify_user, :only => [:show]
+    before_filter :verify_user, :only => [:show] unless Rails.env.test?
 
     def new
       if f1_current_user
