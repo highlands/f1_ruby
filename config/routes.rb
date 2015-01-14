@@ -4,4 +4,6 @@ F1::Engine.routes.draw do
   post "sign_in"             => "sessions#create"
   get "destroy_f1_session"   => "sessions#destroy"
   get "me"                   => "sessions#show", as: "f1_user"
+  get "sign_up"              => "registrations#new", as: "new_f1_user_registration"
+  post "sign_up"             => "registrations#create"
 end

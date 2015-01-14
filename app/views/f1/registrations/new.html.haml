@@ -1,0 +1,12 @@
+%h3 Register:
+.row
+  .large-6.columns
+    = form_tag f1.new_f1_user_registration_path do
+      = label_tag :first_name
+      = text_field_tag "user[first_name]"
+      = label_tag :last_name
+      = text_field_tag "user[last_name]"
+      = label_tag :email
+      = text_field_tag "user[email]"
+      = submit_tag "Register", :class => "button tiny"
+      = link_to "Sign In", new_f1_user_session_path, :class => "button tiny secondary"
