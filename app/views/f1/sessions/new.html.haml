@@ -1,14 +1,16 @@
-.row
-  .large-6.columns.small-centered
+.login
+  .container
     %center
-      = image_tag("highlands-white.png", :class => "circle")
+      .circle
+        = image_tag("highlands-white.png", :width => "65")
       %h3.blue Sign In to Your Account
     = form_tag f1.new_f1_user_session_path do
       = text_field_tag "user[username]", nil, :placeholder => "Username"
       = password_field_tag "user[password]", nil, :placeholder => "Password"
       %center
-        = link_to "Forgot your password?"
-      = submit_tag "Sign In", :class => "button expand radius"
+        = link_to "Forget your password?", "#", :class => "forgot-password"
+      = submit_tag "Sign In", :class => "submit"
       %center
         .strike-through OR
         = link_to "Sign Up for a New Account", "#"
+
