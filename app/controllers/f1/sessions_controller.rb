@@ -49,7 +49,6 @@ module F1
       user.id = session[:f1_current_user]["@id"].to_i
       user.first_name = session[:f1_current_user]["firstName"]
       user.last_name = session[:f1_current_user]["lastName"]
-      binding.pry
       user.token = cookies[:coth_oauth_token]
       user.secret = cookies[:coth_oauth_token_secret]
       user.url = session[:f1_current_user]["@uri"]
