@@ -47,8 +47,9 @@ module F1
     def update_user
       user = F1::User.find_or_create_by(username: params[:user][:username])
       user.id = session[:f1_current_user]["@id"].to_i
-      user.first_name = session[:f1_current_user]["firstName"].to_i
-      user.last_name = session[:f1_current_user]["lastName"].to_i
+      user.first_name = session[:f1_current_user]["firstName"]
+      user.last_name = session[:f1_current_user]["lastName"]
+      binding.pry
       user.token = cookies[:coth_oauth_token]
       user.secret = cookies[:coth_oauth_token_secret]
       user.url = session[:f1_current_user]["@uri"]
