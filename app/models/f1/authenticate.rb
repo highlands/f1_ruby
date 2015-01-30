@@ -4,7 +4,8 @@ module F1
 
     def initialize(username = nil, password = nil, church_code = "chbhmal", env = "staging", )
       # can use PortalUser or WeblinkUser
-      url = "https://#{church_code}.#{env}.fellowshiponeapi.com/v1/WeblinkUser/AccessToken"
+      # url = "https://#{church_code}.#{env}.fellowshiponeapi.com/v1/WeblinkUser/AccessToken"
+      url = "https://#{church_code}.fellowshiponeapi.com/v1/WeblinkUser/AccessToken"
       church_code = church_code
       env = env
       key = ENV["F1_KEY"]
