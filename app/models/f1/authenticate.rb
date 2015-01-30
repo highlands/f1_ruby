@@ -2,12 +2,11 @@ module F1
   class Authenticate
     attr_accessor :oauth_token_secret, :oauth_token, :user_link, :errors
 
-    def initialize(username = nil, password = nil, church_code = "chbhmal", env = "staging", )
+    def initialize(username = nil, password = nil, church_code = "chbhmal")
       # can use PortalUser or WeblinkUser
-      # url = "https://#{church_code}.#{env}.fellowshiponeapi.com/v1/WeblinkUser/AccessToken"
-      url = "https://#{church_code}.fellowshiponeapi.com/v1/WeblinkUser/AccessToken"
+      user_type = username.match(/@/) && username.match(/\./) ? "WeblinkUser" : "PortalUser"
+      url = "https://#{church_code}.fellowshiponeapi.com/v1/#{user_type}/AccessToken"
       church_code = church_code
-      env = env
       key = ENV["F1_KEY"]
       signature = URI.encode(Base64.encode64("#{username} #{password}"))
       data = "ec=" + signature
