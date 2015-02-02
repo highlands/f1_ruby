@@ -6,7 +6,6 @@ module F1
       # can use PortalUser or WeblinkUser
       user_type = username.match(/@/) && username.match(/\./) ? "WeblinkUser" : "PortalUser"
       url = "https://#{church_code}.fellowshiponeapi.com/v1/#{user_type}/AccessToken"
-      church_code = church_code
       key = ENV["F1_KEY"]
       signature = URI.encode(Base64.encode64("#{username} #{password}"))
       data = "ec=" + signature
@@ -50,3 +49,4 @@ module F1
 
   end
 end
+

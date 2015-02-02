@@ -45,8 +45,13 @@ module F1
     end
 
     def update_user
-      user = F1::User.find_or_create_by(username: params[:user][:username])
-      user.id = session[:f1_current_user]["@id"].to_i
+      user = F1::User.find_or_create_by(id: session[:f1_current_user]["@id"].to_i)
+      if portal_user?(params[:user][:username])
+        user.username = params[:user][:username]
+        user.type = "F1::Admin"
+      else
+        user.email = params[:user][:username]
+      end
       user.first_name = session[:f1_current_user]["firstName"]
       user.last_name = session[:f1_current_user]["lastName"]
       user.token = cookies[:coth_oauth_token]
@@ -55,6 +60,12 @@ module F1
       user.last_sign_in_ip = request.remote_ip
       user.save
       cookies[:f1_user_id] = user.id
+    end
+
+    private
+
+    def portal_user?(username)
+       !username.match(/@/) && !username.match(/\./)
     end
 
   end
