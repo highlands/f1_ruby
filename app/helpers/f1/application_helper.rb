@@ -3,27 +3,17 @@ module F1
 
     def validate_user
       user_id = F1::User.find(cookies[:f1_user_id]).id
-      if F1::Authenticate.get_details(user_id)
-        return true
-      else
-        return false
-      end
+      F1::Authenticate.get_details(user_id) ? true : false
     rescue
-      return false
+      false
     end
 
     def current_user
-      if Rails.env.test?
-        F1::User.find_or_create_by(username: "dude")
-      else
-        F1::User.find(cookies[:f1_user_id])
-      end
-    rescue
-      nil
+      F1::User.find(cookies[:f1_user_id]) rescue nil
     end
 
     def current_admin
-      current_user && current_user.admin
+      current_user && current_user.is_a?(F1::Admin)
     end
 
     def f1_current_user

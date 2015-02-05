@@ -1,0 +1,9 @@
+%h3 Edit Your Details
+.dashboard
+  .row
+    = form_tag f1.update_f1_user_path, multipart: true do
+      - if current_user.image.present?
+        = image_tag(current_user.round_image, size: "100x100")
+      = label_tag "Avatar Image"
+      = file_field_tag "image"
+      = submit_tag "Update"
