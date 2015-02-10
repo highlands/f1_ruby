@@ -45,9 +45,9 @@ module F1
 
     def mock_user
       if @test
-        create_header("https://chbhmal.staging.fellowshiponeapi.com/v1/accounts/new.json")
+        create_header("https://#{ENV["F1_CODE"]}.staging.fellowshiponeapi.com/v1/accounts/new.json")
       else
-        create_header("https://chbhmal.fellowshiponeapi.com/v1/accounts/new.json")
+        create_header("https://#{ENV["F1_CODE"]}.fellowshiponeapi.com/v1/accounts/new.json")
       end
     end
 
