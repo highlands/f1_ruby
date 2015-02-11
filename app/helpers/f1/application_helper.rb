@@ -2,8 +2,7 @@ module F1
   module ApplicationHelper
 
     def validate_user
-      user_id = F1::User.find(cookies[:f1_user_id]).id
-      F1::Authenticate.get_details(user_id) ? true : false
+      current_user.is_valid?(cookies[:coth_oauth_token], cookies[:coth_oauth_token_secret])
     rescue
       false
     end

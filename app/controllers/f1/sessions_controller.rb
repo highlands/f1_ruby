@@ -73,7 +73,7 @@ module F1
     end
 
     def portal_user?(username)
-       !username.match(/@/) && !username.match(/\./)
+      !username.match(/@/) && !username.match(/\./)
     end
 
   end
