@@ -1,0 +1,17 @@
+.login
+  .container
+    %center
+      .circle
+        = image_tag("highlands-white.png", :width => "65")
+      %h3.blue Create a Highlands Account
+    = form_tag f1.create_f1_user_registration_path do
+      = text_field_tag "f1[account][firstName]", nil, :placeholder => "First Name"
+      = text_field_tag "f1[account][lastName]", nil, :placeholder => "Last Name"
+      = text_field_tag "f1[account][email]", nil, :placeholder => "Email"
+      %center
+      = submit_tag "Register", :class => "submit"
+      %center
+        %hr
+        %span.strike-through OR
+        = link_to "Login with an existing account", f1.new_f1_user_session_path
+

@@ -29,7 +29,7 @@ module F1
       @errors = "Connection Failed"
     end
 
-    def create_user(fname = nil, lname = nil, email = nil, redirect = nil)
+    def create_user(params = nil, redirect = nil)
       if test
         url = "https://#{ENV["F1_CODE"]}.staging.fellowshiponeapi.com/v1/accounts.json"
       else
@@ -37,7 +37,8 @@ module F1
       end
       oauth_signature = get_secret + oauth_token_secret
       authorization_header = "OAuth oauth_version=\"1.0\",oauth_token=\"#{oauth_token}\",oauth_nonce=\"#{uid}\",oauth_timestamp=\"#{timestamp}\",oauth_consumer_key=\"#{get_key}\",oauth_signature_method=\"PLAINTEXT\",oauth_signature=\"#{oauth_signature}\""
-      data = {"account" => {'firstName' => fname, 'lastName' => lname, 'email' => email, 'urlRedirect' => redirect}}.to_json
+      params["account"]["urlRedirect"] = redirect
+      data = params.to_json
       create_user!(url, authorization_header, data)
     rescue
       @errors = "Failed to create your account"
