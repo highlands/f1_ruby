@@ -7,6 +7,10 @@ module F1
       false
     end
 
+    def authenticate_user
+      redirect_to f1.new_f1_user_session_path(redirect: request.env["REQUEST_URI"]) unless current_user
+    end
+
     def current_user
       F1::User.find(cookies[:f1_user_id]) rescue nil
     end

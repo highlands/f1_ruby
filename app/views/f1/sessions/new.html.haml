@@ -7,6 +7,7 @@
     = form_tag f1.new_f1_user_session_path do
       = text_field_tag "user[username]", nil, :placeholder => "Username"
       = password_field_tag "user[password]", nil, :placeholder => "Password"
+      = hidden_field_tag "redirect", @redirect if @redirect
       %center
         = link_to "Forget your password?", "#", :class => "forgot-password"
       = submit_tag "Sign In", :class => "submit"

@@ -1,26 +1,31 @@
 module F1
   class SessionsController < F1::ApplicationController
     include F1::ApplicationHelper
-    before_filter :verify_user, :only => [:show, :edit] unless Rails.env.test?
+    before_filter :verify_user, :only => [:show, :edit]
 
     def new
       if f1_current_user
         redirect_to f1.f1_user_path
       end
+      @redirect = params[:redirect]
     end
 
     def create
       connection = F1::Authenticate.new(params[:user][:username], params[:user][:password])
       if connection.errors.present?
         flash[:alert] = connection.errors
-        redirect_to main_app.root_path
+        redirect_to f1.new_f1_user_session_path
       else
         if connection.oauth_token.present? && connection.oauth_token_secret.present?
           cookies[:coth_oauth_token] = connection.oauth_token
           cookies[:coth_oauth_token_secret] = connection.oauth_token_secret
           session[:f1_current_user] = connection.get_person["person"]
           update_user
-          redirect_to main_app.root_path
+          if params[:redirect].present?
+            redirect_to params[:redirect]
+          else
+            redirect_to main_app.root_path
+          end
         else
           destroy
         end
