@@ -7,6 +7,7 @@ module F1
       if f1_current_user
         redirect_to f1.f1_user_path
       end
+      @forgot_password_url = "https://#{ENV["F1_CODE"]}.infellowship.com/UserLogin/ForgotPassword"
       @redirect = params[:redirect]
     end
 
