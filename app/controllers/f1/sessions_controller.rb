@@ -18,8 +18,8 @@ module F1
         redirect_to f1.new_f1_user_session_path
       else
         if connection.oauth_token.present? && connection.oauth_token_secret.present?
-          cookies[:coth_oauth_token] = connection.oauth_token
-          cookies[:coth_oauth_token_secret] = connection.oauth_token_secret
+          cookies[:f1_oauth_token] = connection.oauth_token
+          cookies[:f1_oauth_token_secret] = connection.oauth_token_secret
           session[:f1_current_user] = connection.get_person["person"]
           update_user
           if params[:redirect].present?
@@ -44,7 +44,7 @@ module F1
     end
 
     def destroy
-      session[:f1_current_user] = cookies[:coth_oauth_token] = cookies[:coth_oauth_token_secret] = cookies[:f1_user_id] = nil
+      session[:f1_current_user] = cookies[:f1_oauth_token] = cookies[:f1_oauth_token_secret] = cookies[:f1_user_id] = nil
       redirect_to main_app.root_path
     end
 
@@ -70,8 +70,8 @@ module F1
       end
       user.first_name = session[:f1_current_user]["firstName"]
       user.last_name = session[:f1_current_user]["lastName"]
-      user.token = cookies[:coth_oauth_token]
-      user.secret = cookies[:coth_oauth_token_secret]
+      user.token = cookies[:f1_oauth_token]
+      user.secret = cookies[:f1_oauth_token_secret]
       user.url = session[:f1_current_user]["@uri"]
       user.last_sign_in_ip = request.remote_ip
       user.save
