@@ -9,7 +9,7 @@
       = password_field_tag "user[password]", nil, :placeholder => "Password"
       = hidden_field_tag "redirect", @redirect if @redirect
       %center
-        = link_to "Forget your password?", @forgot_password_url, :class => "forgot-password"
+        = link_to "Forget your password?", @forgot_password_url, :class => "forgot-password", :target => "_blank"
       = submit_tag "Sign In", :class => "submit"
       %center
         %hr
