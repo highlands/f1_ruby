@@ -5,9 +5,9 @@
         = image_tag("highlands-white.png", :width => "65")
       %h3.blue Create a Highlands Account
     = form_tag f1.create_f1_user_registration_path do
-      = text_field_tag "f1[account][firstName]", nil, :placeholder => "First Name"
-      = text_field_tag "f1[account][lastName]", nil, :placeholder => "Last Name"
-      = text_field_tag "f1[account][email]", nil, :placeholder => "Email"
+      = text_field_tag "f1[account][firstName]", nil, :placeholder => "First Name", required: true
+      = text_field_tag "f1[account][lastName]", nil, :placeholder => "Last Name", required: true
+      = text_field_tag "f1[account][email]", nil, :placeholder => "Email", required: true
       %center
       = submit_tag "Register", :class => "submit"
       %center
