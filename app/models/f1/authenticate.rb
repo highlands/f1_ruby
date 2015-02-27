@@ -2,7 +2,7 @@ module F1
   class Authenticate
     attr_accessor :oauth_token_secret, :oauth_token, :user_link, :errors, :test
 
-    def initialize(username = nil, password = nil, test = true)
+    def initialize(username = nil, password = nil, test = Rails.env.development?)
       @test = test
       user_type = username.match(/@/) && username.match(/\./) ? "WeblinkUser" : "PortalUser"
       if test
