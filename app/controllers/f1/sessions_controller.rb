@@ -25,7 +25,7 @@ module F1
           if params[:redirect].present?
             redirect_to params[:redirect]
           else
-            redirect_to "https://www.churchofthehighlands.com/missions"
+            redirect_to main_app.root_path
           end
         else
           destroy
@@ -45,7 +45,7 @@ module F1
 
     def destroy
       session[:f1_current_user] = cookies[:f1_oauth_token] = cookies[:f1_oauth_token_secret] = cookies[:f1_user_id] = nil
-      redirect_to "https://www.churchofthehighlands.com/missions"
+      redirect_to main_app.root_path
     end
 
     def show
