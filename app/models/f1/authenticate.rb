@@ -2,7 +2,7 @@ module F1
   class Authenticate
     attr_accessor :oauth_token_secret, :oauth_token, :user_link, :errors, :test
 
-    def initialize(username = nil, password = nil, test = Rails.env.development?)
+    def initialize(username = nil, password = nil, test = !Rails.env.production?)
       @test = test
       user_type = username.match(/@/) && username.match(/\./) ? "WeblinkUser" : "PortalUser"
       if test
@@ -57,8 +57,13 @@ module F1
     def authenticate!(url, authorization_header, data = nil)
       resp = Excon.post(url, :body => data, :headers => { "Content-Type" => "application/x-www-form-urlencoded", "Authorization" => authorization_header })
       if resp.status == 200
-        @oauth_token = resp.headers["oauth_token"]
-        @oauth_token_secret = resp.headers["oauth_token_secret"]
+        if resp.headers["oauth_token"].present? && resp.headers["oauth_token_secret"].present?
+          @oauth_token = resp.headers["oauth_token"]
+          @oauth_token_secret = resp.headers["oauth_token_secret"]
+        elsif resp.headers["Oauth-Token"].present? && resp.headers["Oauth-Token-Secret"].present?
+          @oauth_token = resp.headers["Oauth-Token"]
+          @oauth_token_secret = resp.headers["Oauth-Token-Secret"]
+        end
         @user_link = resp.headers["Content-Location"]
         @errors = nil
       elsif resp.reason_phrase.present?
@@ -66,6 +71,7 @@ module F1
       else
         @errors = "Connection Failed"
       end
+
     end
 
     def request!(url, authorization_header)
