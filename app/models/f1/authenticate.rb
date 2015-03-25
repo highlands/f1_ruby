@@ -1,6 +1,6 @@
 module F1
   class Authenticate
-    attr_accessor :oauth_token_secret, :oauth_token, :user_link, :errors, :test
+    attr_accessor :oauth_token_secret, :oauth_token, :user_link, :errors, :test, :has_account
 
     def initialize(username = nil, password = nil, test = !Rails.env.production?)
       @test = test
@@ -91,10 +91,16 @@ module F1
       if resp.status == 204
         @errors = nil
         resp.body
+      elsif resp.status == 409
+        @errors = "An account already exists for the email address you provided."
+        @has_account = true
+        return false
       elsif resp.reason_phrase.present?
         @errors = resp.reason_phrase
+        return false
       else
         @errors = "Connection Failed"
+        return false
       end
     end
 
