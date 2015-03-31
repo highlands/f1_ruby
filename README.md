@@ -26,9 +26,7 @@ Add gem to Gemfile:
 
     mount F1::Engine => "/users", :as => "f1"
 
-##### Now all authentication routes should be prefixed with 'f1'
-
-##### For instance:
+##### Now all authentication routes should be prefixed with 'f1', for instance:
 
     f1.new_f1_user_session_path
 
