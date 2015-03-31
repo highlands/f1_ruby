@@ -22,6 +22,17 @@ Add gem to Gemfile:
 
     rake db:migrate
 
+#### Add Route to config/routes.rb :
+
+    mount F1::Engine => "/users", :as => "f1"
+
+##### Now all authentication routes should be prefixed with 'f1'
+
+##### For instance:
+
+    f1.new_f1_user_session_path
+
+    f1.new_f1_user_registration_path
 
 #### Helper Methods:
 
