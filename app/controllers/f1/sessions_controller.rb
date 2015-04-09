@@ -25,7 +25,7 @@ module F1
           if params[:redirect].present?
             redirect_to params[:redirect]
           else
-            redirect_to main_app.root_path
+            redirect_to f1.f1_user_path
           end
         else
           destroy
