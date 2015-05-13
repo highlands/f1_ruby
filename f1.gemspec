@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
   s.version     = F1::VERSION
   s.authors     = ["JD Warren"]
   s.email       = ["jd@churchofthehighlands.com"]
-  s.homepage    = "http://churchofthehighlands.com"
+  s.homepage    = "https://github.com/highlands/single_sign_on"
   s.summary     = "An authentication wrapper for Fellowship One in Ruby."
   s.description = "Pass in a username and password to authenticate against Fellowship One"
   s.license     = "MIT"
