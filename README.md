@@ -34,6 +34,12 @@ Add gem to Gemfile:
 
 #### Helper Methods:
 
+To access helper methods in this gem, you must include the following in the top of your application controller (or any specific controller you wish):
+
+    include F1::ApplicationHelper
+
+You can then access the following:
+
     current_user
 
 This gets you the user object created when the current user logged in with F1 credentials.
@@ -41,4 +47,6 @@ This gets you the user object created when the current user logged in with F1 cr
     f1_current_user
 
 This gets you the string returned by F1 when the user logged in. It contains the user's details in a hash.
+
+
 
