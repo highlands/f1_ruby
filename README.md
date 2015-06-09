@@ -8,7 +8,7 @@ Rails 4
 
 Add gem to Gemfile:
 
-    gem 'f1', :git => "git@github.com:highlands/single_sign_on.git"
+    gem 'f1', :github => "highlands/f1_ruby"
 
 #### Bundle:
 
