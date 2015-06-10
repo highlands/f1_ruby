@@ -26,6 +26,41 @@ Add gem to Gemfile:
 
     mount F1::Engine => "/users", :as => "f1"
 
+#### Add Fellowship One Api Key, Secret, and Church code as environment variables in .bashrc. If you have a staging Fellowship One account, you can add those too.
+
+    export F1_CODE="YOUR_CHUCH_CODE"
+
+    # development (staging) keys
+
+    export F1_KEY_STAGING="xxx"
+    export F1_SECRET_STAGING="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+
+    # production keys
+
+    export F1_KEY="xxx"
+    export F1_SECRET="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+
+You will need to source your bashrc file after adding. Either close/re-open all terminal windows or run:
+
+    source ~/.bashrc
+
+Then restart your rails server.
+
+    rails s
+
+
+##### Sign in
+
+You can sign in by going to the following url:
+
+    http://localhost:3000/users/sign_in
+
+Then enter your F1 username or email and valid password. This gem will work with either a Portal User's username or a Weblink User's email address and distinguish between the two automatically.
+
+If your login is successful, you should be redirected to a page with your F1 user's data. If there is an error, you should be redirected back to the login page with an error (Rails flash) message available.
+
+## Routes
+
 ##### Now all authentication routes should be prefixed with 'f1', for instance:
 
     f1.new_f1_user_session_path
