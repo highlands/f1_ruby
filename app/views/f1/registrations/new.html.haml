@@ -1,17 +1,23 @@
-.login
-  .container
-    %center
-      .circle
-        = image_tag("logo.png", :width => "65")
-      %h3.blue Create an Account
-    = form_tag f1.create_f1_user_registration_path do
-      = text_field_tag "f1[account][firstName]", nil, :placeholder => "First Name", required: true
-      = text_field_tag "f1[account][lastName]", nil, :placeholder => "Last Name", required: true
-      = text_field_tag "f1[account][email]", nil, :placeholder => "Email", required: true
-      %center
-      = submit_tag "Register", :class => "submit"
-      %center
-        %hr
-        %span.strike-through OR
-        = link_to "Login with an existing account", f1.new_f1_user_session_path
+.container-fluid
+  .row
+    .col-md-4.col-md-offset-4
+      .login
+        .login-container
+          %center
+            .circle
+              = image_tag("logo.png", :width => "65")
+            %h3.blue Create an Account
+          = form_tag f1.create_f1_user_registration_path do
+            .form-group
+              = text_field_tag "f1[account][firstName]", nil, :placeholder => "First Name", required: true, :class => "form-control"
+            .form-group
+              = text_field_tag "f1[account][lastName]", nil, :placeholder => "Last Name", required: true, :class => "form-control"
+            .form-group
+              = text_field_tag "f1[account][email]", nil, :placeholder => "Email", required: true, :class => "form-control"
+            %center
+            = submit_tag "Register", :class => "submit btn btn-default"
+            %center
+              %hr
+              %span.strike-through OR
+              = link_to "Login with an existing account", f1.new_f1_user_session_path
 

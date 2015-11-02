@@ -5,11 +5,7 @@ module F1
     def initialize(username = nil, password = nil, test = !Rails.env.production?)
       @test = test
       user_type = username.match(/@/) && username.match(/\./) ? "WeblinkUser" : "PortalUser"
-      if test
-        url = "https://#{ENV["F1_CODE"]}.staging.fellowshiponeapi.com/v1/#{user_type}/AccessToken"
-      else
-        url = "https://#{ENV["F1_CODE"]}.fellowshiponeapi.com/v1/#{user_type}/AccessToken"
-      end
+      url = "https://#{ENV["F1_CODE"]}#{".staging" if test}.fellowshiponeapi.com/v1/#{user_type}/AccessToken"
       data = "ec=" + signature(username, password)
       authorization_header = "OAuth oauth_version=\"1.0\",oauth_nonce=\"#{uid}\",oauth_timestamp=\"#{timestamp}\",oauth_consumer_key=\"#{get_key}\",oauth_signature_method=\"PLAINTEXT\",oauth_signature=\"#{get_secret}\""
       authenticate!(url, authorization_header, data)
@@ -17,9 +13,31 @@ module F1
       @errors = "Connection Failed"
     end
 
+    #################################################
+    # Methods to interact with fellowship one's api #
+    #################################################
+
     def get_person
       create_header("#{user_link}.json")
     end
+
+    def get_attributes
+      create_header("#{user_link}/Attributes.json")
+    end
+
+    def get_requirements
+      create_header("#{user_link}/requirements.json")
+    end
+
+    def get_communications
+      create_header("#{user_link}/communications.json")
+    end
+
+    def get_addresses
+      create_header("#{user_link}/addresses.json")
+    end
+
+    ####################################################
 
     def create_header(url)
       oauth_signature = get_secret + oauth_token_secret
@@ -30,11 +48,7 @@ module F1
     end
 
     def create_user(params = nil, redirect = nil)
-      if test
-        url = "https://#{ENV["F1_CODE"]}.staging.fellowshiponeapi.com/v1/accounts.json"
-      else
-        url = "https://#{ENV["F1_CODE"]}.fellowshiponeapi.com/v1/accounts.json"
-      end
+      url = "https://#{ENV["F1_CODE"]}#{".staging" if test}.fellowshiponeapi.com/v1/accounts.json"
       oauth_signature = get_secret + oauth_token_secret
       authorization_header = "OAuth oauth_version=\"1.0\",oauth_token=\"#{oauth_token}\",oauth_nonce=\"#{uid}\",oauth_timestamp=\"#{timestamp}\",oauth_consumer_key=\"#{get_key}\",oauth_signature_method=\"PLAINTEXT\",oauth_signature=\"#{oauth_signature}\""
       params["account"]["urlRedirect"] = redirect
@@ -45,11 +59,7 @@ module F1
     end
 
     def mock_user
-      if @test
-        create_header("https://#{ENV["F1_CODE"]}.staging.fellowshiponeapi.com/v1/accounts/new.json")
-      else
-        create_header("https://#{ENV["F1_CODE"]}.fellowshiponeapi.com/v1/accounts/new.json")
-      end
+      create_header("https://#{ENV["F1_CODE"]}#{".staging" if @test}.fellowshiponeapi.com/v1/accounts/new.json")
     end
 
     private

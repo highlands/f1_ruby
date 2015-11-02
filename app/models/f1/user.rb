@@ -1,5 +1,6 @@
 module F1
   class User < ActiveRecord::Base
+
     def name
       "#{first_name} #{last_name}"
     end
@@ -11,5 +12,6 @@ module F1
     def is_valid?(cookie_token, cookie_secret)
       token == cookie_token && secret == cookie_secret
     end
+
   end
 end

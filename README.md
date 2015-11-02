@@ -83,3 +83,5 @@ This gets you the user object created when the current user logged in with F1 cr
 
 This gets you the string returned by F1 when the user logged in. It contains the user's details in a hash.
 
+
+
