@@ -24,8 +24,8 @@ module F1
           extras = nil
           if F1::User.column_names.include?("data")
             extras = {}
-            extras[:attributes] = connection.get_attributes
-            extras[:requirements] = connection.get_requirements
+            extras[:attributes] = connection.get_attributes["attributes"]
+            extras[:peopleRequirements] = connection.get_requirements["peopleRequirements"]
           end
           update_user(extras)
           if params[:redirect].present?

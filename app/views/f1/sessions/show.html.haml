@@ -7,3 +7,35 @@
   - f1_current_user.each do |k,v|
     = "#{k}: #{v}"
     %p
+  %hr
+  - if current_user && current_user.try(:data).present?
+
+    %h3 F1 Attributes
+    %table{:style => "width: 100%;", :border =>  1}
+      %thead
+        %tr
+          %th Attribute Group Name
+          %th Attribute Name
+          %th Created At
+      %tbody
+        - current_user.data["attributes"]["attribute"].each do |attr|
+          %tr
+            %td= attr["attributeGroup"]["name"]
+            %td= attr["attributeGroup"]["attribute"]["name"]
+            %td= attr["createdDate"]
+
+    %h3 F1 Requirements
+    %table{:style => "width: 100%;", :border =>  1}
+      %thead
+        %tr
+          %th Requirement Name
+          %th Requirement Status
+          %th Added By
+          %th Created At
+      %tbody
+        - current_user.data["peopleRequirements"]["peopleRequirement"].each do |attr|
+          %tr
+            %td= attr["requirement"]["name"]
+            %td= attr["requirementStatus"]["name"]
+            %td= attr["staffPerson"]["@id"]
+            %td= attr["requirementDate"]
