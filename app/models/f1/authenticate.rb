@@ -5,7 +5,12 @@ module F1
     def initialize(username = nil, password = nil, test = !Rails.env.production?)
       @test = test
       user_type = username.match(/@/) && username.match(/\./) ? "WeblinkUser" : "PortalUser"
-      url = "https://#{ENV["F1_CODE"]}#{".staging" if test}.fellowshiponeapi.com/v1/#{user_type}/AccessToken"
+      if test
+        Excon.defaults[:ssl_verify_peer] = false
+        url = "https://#{ENV["F1_CODE"]}.staging.fellowshiponeapi.com/v1/#{user_type}/AccessToken"
+      else
+        url = "https://#{ENV["F1_CODE"]}.fellowshiponeapi.com/v1/#{user_type}/AccessToken"
+      end
       data = "ec=" + signature(username, password)
       authorization_header = "OAuth oauth_version=\"1.0\",oauth_nonce=\"#{uid}\",oauth_timestamp=\"#{timestamp}\",oauth_consumer_key=\"#{get_key}\",oauth_signature_method=\"PLAINTEXT\",oauth_signature=\"#{get_secret}\""
       authenticate!(url, authorization_header, data)
@@ -48,7 +53,12 @@ module F1
     end
 
     def create_user(params = nil, redirect = nil)
-      url = "https://#{ENV["F1_CODE"]}#{".staging" if test}.fellowshiponeapi.com/v1/accounts.json"
+      if @test
+        Excon.defaults[:ssl_verify_peer] = false
+        url = "https://#{ENV["F1_CODE"]}.staging.fellowshiponeapi.com/v1/accounts.json"
+      else
+        url = "https://#{ENV["F1_CODE"]}.fellowshiponeapi.com/v1/accounts.json"
+      end
       oauth_signature = get_secret + oauth_token_secret
       authorization_header = "OAuth oauth_version=\"1.0\",oauth_token=\"#{oauth_token}\",oauth_nonce=\"#{uid}\",oauth_timestamp=\"#{timestamp}\",oauth_consumer_key=\"#{get_key}\",oauth_signature_method=\"PLAINTEXT\",oauth_signature=\"#{oauth_signature}\""
       params["account"]["urlRedirect"] = redirect
@@ -59,7 +69,11 @@ module F1
     end
 
     def mock_user
-      create_header("https://#{ENV["F1_CODE"]}#{".staging" if @test}.fellowshiponeapi.com/v1/accounts/new.json")
+      if @test
+        create_header("https://#{ENV["F1_CODE"]}.staging.fellowshiponeapi.com/v1/accounts/new.json")
+      else
+        create_header("https://#{ENV["F1_CODE"]}.fellowshiponeapi.com/v1/accounts/new.json")
+      end
     end
 
     private

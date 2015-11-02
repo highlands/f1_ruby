@@ -12,7 +12,7 @@ module F1
     end
 
     def create
-      connection = F1::Authenticate.new(params[:user][:username], params[:user][:password])
+      connection = F1::Authenticate.new(params[:user][:username], params[:user][:password], false)
       if connection.errors.present?
         flash[:alert] = connection.errors
         redirect_to f1.new_f1_user_session_path
@@ -21,7 +21,13 @@ module F1
           cookies.permanent.signed[:f1_oauth_token] = connection.oauth_token
           cookies.permanent.signed[:f1_oauth_token_secret] = connection.oauth_token_secret
           session[:f1_current_user] = connection.get_person["person"]
-          update_user
+          extras = nil
+          if F1::User.column_names.include?("data")
+            extras = {}
+            extras[:attributes] = connection.get_attributes
+            extras[:requirements] = connection.get_requirements
+          end
+          update_user(extras)
           if params[:redirect].present?
             redirect_to params[:redirect]
           else
@@ -60,7 +66,7 @@ module F1
       end
     end
 
-    def update_user
+    def update_user(extras = nil)
       user = F1::User.find_or_create_by(id: session[:f1_current_user]["@id"].to_i)
       if portal_user?(params[:user][:username])
         user.username = params[:user][:username]
@@ -74,6 +80,7 @@ module F1
       user.secret = cookies.signed[:f1_oauth_token_secret]
       user.url = session[:f1_current_user]["@uri"]
       user.last_sign_in_ip = request.remote_ip
+      user.data = extras if extras.present?
       user.save
       cookies.permanent.signed[:f1_user_id] = user.id
     end

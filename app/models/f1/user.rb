@@ -1,5 +1,6 @@
 module F1
   class User < ActiveRecord::Base
+    serialize :data, ActiveRecord::Coders::NestedHstore
 
     def name
       "#{first_name} #{last_name}"
