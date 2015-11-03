@@ -10,7 +10,7 @@ class CreateF1Users < ActiveRecord::Migration
       t.string :secret
       t.string :url
       t.string :type
-      t.data :hstore
+      t.hstore :data
       t.string :last_sign_in_ip
       t.boolean :admin, default: false
 
