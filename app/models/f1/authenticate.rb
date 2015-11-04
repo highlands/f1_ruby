@@ -42,6 +42,22 @@ module F1
       create_header("#{user_link}/addresses.json")
     end
 
+    def search_by_name(name = nil)
+      if @test
+        create_header("https://#{ENV["F1_CODE"]}.staging.fellowshiponeapi.com/v1/People/Search.json?searchFor=#{name}")
+      else
+        create_header("https://#{ENV["F1_CODE"]}.fellowshiponeapi.com/v1/People/Search.json?searchFor=#{name}")
+      end
+    end
+
+    def search_by_email(email = nil)
+      if @test
+        create_header("https://#{ENV["F1_CODE"]}.staging.fellowshiponeapi.com/v1/People/Search.json?communication=#{email}")
+      else
+        create_header("https://#{ENV["F1_CODE"]}.fellowshiponeapi.com/v1/People/Search.json?communication=#{email}")
+      end
+    end
+
     ####################################################
 
     def create_header(url)
