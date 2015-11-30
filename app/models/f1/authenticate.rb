@@ -130,7 +130,7 @@ module F1
       resp = Excon.post(url, :body => data, :headers => { "Content-Type" => "application/json", "Authorization" => authorization_header })
       if resp.status == 204
         @errors = nil
-        resp.body
+        @reason = resp.reason_phrase
       elsif resp.status == 409
         @errors = "An account already exists for the email address you provided."
         @has_account = true
