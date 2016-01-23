@@ -22,6 +22,10 @@ module F1
     # Methods to interact with fellowship one's api #
     #################################################
 
+    def get_person_by_id(id)
+      create_header("https://chbhmal.fellowshiponeapi.com/v1/People/#{id}.json")
+    end
+
     def get_person
       create_header("#{user_link}.json")
     end
@@ -52,10 +56,24 @@ module F1
 
     def search_by_email(email = nil)
       if @test
-        create_header("https://#{ENV["F1_CODE"]}.staging.fellowshiponeapi.com/v1/People/Search.json?communication=#{email}")
+        create_header("https://#{ENV["F1_CODE"]}.staging.fellowshiponeapi.com/v1/People/Search.json?communication=#{email}&include=communications")
       else
-        create_header("https://#{ENV["F1_CODE"]}.fellowshiponeapi.com/v1/People/Search.json?communication=#{email}")
+        create_header("https://#{ENV["F1_CODE"]}.fellowshiponeapi.com/v1/People/Search.json?communication=#{email}&include=communications")
       end
+    end
+
+    def associated_accounts(email = nil)
+      results = create_header("https://#{ENV["F1_CODE"]}.fellowshiponeapi.com/v1/People/Search.json?communication=#{email}&include=communications")
+      if results && results["results"].present? && results["results"]["person"].present?
+        people_with_emails = results["results"]["person"].select{|s| s["communications"]["communication"].select{|t| t["communicationType"]["@id"] == "6" || t["communicationType"]["@id"] == "4" }.present? }
+        people_with_emails.map{|s| {id: s["@id"], first_name: s["firstName"], last_name: s["lastName"], emails: get_emails(s["communications"]["communication"]), communications: s["communications"]["communication"].select{|s| s["communicationType"]["@id"] == "6" || s["communicationType"]["@id"] == "4" } } }
+      else
+        @errors = {errors: "No results found"}
+      end
+    end
+
+    def get_emails(communications)
+      communications.select{|s| s["communicationType"]["@id"] == "6" || s["communicationType"]["@id"] == "4" }.map{|s| s["communicationValue"] }
     end
 
     ####################################################
