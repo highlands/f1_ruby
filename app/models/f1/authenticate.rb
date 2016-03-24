@@ -132,6 +132,21 @@ module F1
       end
     end
 
+    # experimental for updating
+    def put!(url, data = nil)
+      resp = Excon.put(url, :body => data, :headers => { "Content-Type" => "application/json", "Authorization" => request_header })
+      if resp.status == 201
+        @errors = nil
+        @reason = resp.reason_phrase
+      elsif resp.reason_phrase.present?
+        @errors = resp.reason_phrase
+        return false
+      else
+        @errors = "Connection Failed"
+        return false
+      end
+    end
+
     def post_auth!(url, data = nil)
       resp = Excon.post(url, :body => data, :headers => { "Content-Type" => "application/x-www-form-urlencoded", "Authorization" => authorization_header })
       handle_auth_response(resp)
