@@ -2,7 +2,7 @@ module F1
   class Authenticate
     attr_accessor :oauth_token_secret, :oauth_token, :user_link, :errors, :test, :has_account
 
-    def initialize(username = nil, password = nil, test = !Rails.env.production?)
+    def initialize(username = nil, password = nil, test = (!Rails.env.production? && !Rails.env.staging?))
       @test = test
       user_type = username.match(/@/) && username.match(/\./) ? "WeblinkUser" : "PortalUser"
       url = base_url + "#{user_type}/AccessToken"
