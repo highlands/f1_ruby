@@ -23,10 +23,10 @@ module F1
       data = params.to_json
       #  resp = Excon.post(url, :body => data, :headers => { "Content-Type" => "application/json", "Authorization" => request_header })
       resp = HTTParty.post(url, :body => data, :headers => { "Content-Type" => "application/json", "Authorization" => request_header })
-      if resp.status == 204
+      if resp.code == 204
         @errors = nil
         @reason = resp.reason_phrase
-      elsif resp.status == 409
+      elsif resp.code == 409
         @errors = "An account already exists for the email address you provided."
         @has_account = true
         return false
@@ -111,7 +111,7 @@ module F1
     def get!(url)
       #  resp = Excon.get(url, :headers => { "Content-Type" => "application/json", "Authorization" => request_header })
       resp = HTTParty.get(url, :headers => { "Content-Type" => "application/json", "Authorization" => request_header })
-      if resp.status == 200
+      if resp.code == 200
         @errors = nil
         JSON.parse(resp.body)
       elsif resp.reason_phrase.present?
@@ -124,7 +124,7 @@ module F1
     def post!(url, data = nil)
       #  resp = Excon.post(url, :body => data, :headers => { "Content-Type" => "application/json", "Authorization" => request_header })
       resp = HTTParty.post(url, :body => data, :headers => { "Content-Type" => "application/json", "Authorization" => request_header })
-      if resp.status == 201
+      if resp.code == 201
         @errors = nil
         @reason = resp.reason_phrase
       elsif resp.reason_phrase.present?
@@ -140,7 +140,7 @@ module F1
     def put!(url, data = nil)
       #  resp = Excon.put(url, :body => data, :headers => { "Content-Type" => "application/json", "Authorization" => request_header })
       resp = HTTParty.put(url, :body => data, :headers => { "Content-Type" => "application/json", "Authorization" => request_header })
-      if resp.status == 201
+      if resp.code == 201
         @errors = nil
         @reason = resp.reason_phrase
       elsif resp.reason_phrase.present?
