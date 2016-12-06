@@ -21,7 +21,8 @@ module F1
       url = base_url + "accounts.json"
       params["account"]["urlRedirect"] = redirect
       data = params.to_json
-      resp = Excon.post(url, :body => data, :headers => { "Content-Type" => "application/json", "Authorization" => request_header })
+      #  resp = Excon.post(url, :body => data, :headers => { "Content-Type" => "application/json", "Authorization" => request_header })
+      resp = HTTParty.post(url, :body => data, :headers => { "Content-Type" => "application/json", "Authorization" => request_header })
       if resp.status == 204
         @errors = nil
         @reason = resp.reason_phrase
@@ -100,7 +101,7 @@ module F1
 
     def base_url
       if test
-        Excon.defaults[:ssl_verify_peer] = false
+        #Excon.defaults[:ssl_verify_peer] = false
         "https://#{ENV["F1_CODE"]}.staging.fellowshiponeapi.com/v1/"
       else
         "https://#{ENV["F1_CODE"]}.fellowshiponeapi.com/v1/"
@@ -108,7 +109,8 @@ module F1
     end
 
     def get!(url)
-      resp = Excon.get(url, :headers => { "Content-Type" => "application/json", "Authorization" => request_header })
+      #  resp = Excon.get(url, :headers => { "Content-Type" => "application/json", "Authorization" => request_header })
+      resp = HTTParty.get(url, :headers => { "Content-Type" => "application/json", "Authorization" => request_header })
       if resp.status == 200
         @errors = nil
         JSON.parse(resp.body)
@@ -120,7 +122,8 @@ module F1
     end
 
     def post!(url, data = nil)
-      resp = Excon.post(url, :body => data, :headers => { "Content-Type" => "application/json", "Authorization" => request_header })
+      #  resp = Excon.post(url, :body => data, :headers => { "Content-Type" => "application/json", "Authorization" => request_header })
+      resp = HTTParty.post(url, :body => data, :headers => { "Content-Type" => "application/json", "Authorization" => request_header })
       if resp.status == 201
         @errors = nil
         @reason = resp.reason_phrase
@@ -135,7 +138,8 @@ module F1
 
     # experimental for updating
     def put!(url, data = nil)
-      resp = Excon.put(url, :body => data, :headers => { "Content-Type" => "application/json", "Authorization" => request_header })
+      #  resp = Excon.put(url, :body => data, :headers => { "Content-Type" => "application/json", "Authorization" => request_header })
+      resp = HTTParty.put(url, :body => data, :headers => { "Content-Type" => "application/json", "Authorization" => request_header })
       if resp.status == 201
         @errors = nil
         @reason = resp.reason_phrase
@@ -149,7 +153,7 @@ module F1
     end
 
     def post_auth!(url, data = nil)
-#      resp = Excon.post(url, :body => data, :headers => { "Content-Type" => "application/x-www-form-urlencoded", "Authorization" => authorization_header })
+      #  resp = Excon.post(url, :body => data, :headers => { "Content-Type" => "application/x-www-form-urlencoded", "Authorization" => authorization_header })
       resp = HTTParty.post(url, :body => data, :headers => { "Content-Type" => "application/x-www-form-urlencoded", "Authorization" => authorization_header })
       handle_auth_response(resp)
     end
