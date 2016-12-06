@@ -1,8 +1,9 @@
 module F1
   class Authenticate
     attr_accessor :oauth_token_secret, :oauth_token, :user_link, :errors, :test, :has_account
+    require 'httparty'
 
-    def initialize(username = nil, password = nil, test = !Rails.env.production?)
+    def initialize(username = nil, password = nil, test = false)
       @test = test
       user_type = username.match(/@/) && username.match(/\./) ? "WeblinkUser" : "PortalUser"
       url = base_url + "#{user_type}/AccessToken"
@@ -148,7 +149,8 @@ module F1
     end
 
     def post_auth!(url, data = nil)
-      resp = Excon.post(url, :body => data, :headers => { "Content-Type" => "application/x-www-form-urlencoded", "Authorization" => authorization_header })
+#      resp = Excon.post(url, :body => data, :headers => { "Content-Type" => "application/x-www-form-urlencoded", "Authorization" => authorization_header })
+      resp = HTTParty.post(url, :body => data, :headers => { "Content-Type" => "application/x-www-form-urlencoded", "Authorization" => authorization_header })
       handle_auth_response(resp)
     end
 
@@ -162,7 +164,7 @@ module F1
     end
 
     def handle_auth_response(resp)
-      if resp.status == 200
+      if resp.code == 200
         if resp.headers["oauth_token"].present? && resp.headers["oauth_token_secret"].present?
           @oauth_token = resp.headers["oauth_token"]
           @oauth_token_secret = resp.headers["oauth_token_secret"]
