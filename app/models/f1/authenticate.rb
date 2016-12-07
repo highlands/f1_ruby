@@ -25,13 +25,10 @@ module F1
       resp = HTTParty.post(url, :body => data, :headers => { "Content-Type" => "application/json", "Authorization" => request_header })
       if resp.code == 204
         @errors = nil
-        @reason = resp.reason_phrase
+        @reason = "Successfully created user. Please check your email to complete registration." # resp.reason_phrase
       elsif resp.code == 409
         @errors = "An account already exists for the email address you provided."
         @has_account = true
-        return false
-      elsif resp.reason_phrase.present?
-        @errors = resp.reason_phrase
         return false
       else
         @errors = "Connection Failed"
@@ -114,8 +111,6 @@ module F1
       if resp.code == 200
         @errors = nil
         JSON.parse(resp.body)
-      elsif resp.reason_phrase.present?
-        @errors = resp.reason_phrase
       else
         @errors = "Connection Failed"
       end
@@ -126,10 +121,7 @@ module F1
       resp = HTTParty.post(url, :body => data, :headers => { "Content-Type" => "application/json", "Authorization" => request_header })
       if resp.code == 201
         @errors = nil
-        @reason = resp.reason_phrase
-      elsif resp.reason_phrase.present?
-        @errors = resp.reason_phrase
-        return false
+        @reason = "Success" # resp.reason_phrase
       else
         @errors = "Connection Failed"
         return false
@@ -142,10 +134,7 @@ module F1
       resp = HTTParty.put(url, :body => data, :headers => { "Content-Type" => "application/json", "Authorization" => request_header })
       if resp.code == 201
         @errors = nil
-        @reason = resp.reason_phrase
-      elsif resp.reason_phrase.present?
-        @errors = resp.reason_phrase
-        return false
+        @reason = "Success" # resp.reason_phrase
       else
         @errors = "Connection Failed"
         return false
@@ -178,8 +167,6 @@ module F1
         end
         @user_link = resp.headers["Content-Location"]
         @errors = nil
-      elsif resp.reason_phrase.present?
-        @errors = resp.reason_phrase
       else
         @errors = "Connection Failed"
       end
@@ -203,6 +190,10 @@ module F1
 
     def get_secret
       @test.present? ? ENV["F1_SECRET_STAGING"] + "%2526" : ENV["F1_SECRET"] + "%2526"
+    end
+
+    def reason_phrase(resp)
+      resp.headers["status"].gsub(/(\d{3} )/, "") rescue nil
     end
 
   end

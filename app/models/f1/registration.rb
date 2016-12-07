@@ -15,13 +15,10 @@ module F1
       resp = HTTParty.post(url, :body => data, :headers => { "Content-Type" => "application/json", "Authorization" => request_header })
       if resp.code == 204
         @errors = nil
-        @reason = resp.reason_phrase
+        @reason = "Successfuly created your account. Please check your email to complete registration." # resp.reason_phrase
       elsif resp.code == 409
         @errors = "An account already exists for the email address you provided."
         @has_account = true
-        return false
-      elsif resp.reason_phrase.present?
-        @errors = resp.reason_phrase
         return false
       else
         @errors = "Connection Failed"
