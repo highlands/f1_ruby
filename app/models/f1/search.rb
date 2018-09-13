@@ -7,7 +7,7 @@ module F1
     end
 
     def search_by_email(email = nil)
-      get!("https://#{ENV["F1_CODE"]}.fellowshiponeapi.com/v1/People/Search.json?communication=#{email}&include=communications")
+      get!("https://#{ENV["F1_CODE"]}.fellowshiponeapi.com/v1/People/Search.json?communication=#{email}&include=communications&recordsPerPage=1000")
     end
 
   end
