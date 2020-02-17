@@ -141,6 +141,16 @@ module F1
       end
     end
 
+    def delete!(url)
+      resp = HTTParty.delete(url, :headers => { "Content-Type" => "application/json", "Authorization" => request_header })
+      if resp.code == 204
+        @errors = nil
+        JSON.parse(resp.body)
+      else
+        @errors = "Connection Failed"
+      end
+    end
+
     def post_auth!(url, data = nil)
       #  resp = Excon.post(url, :body => data, :headers => { "Content-Type" => "application/x-www-form-urlencoded", "Authorization" => authorization_header })
       resp = HTTParty.post(url, :body => data, :headers => { "Content-Type" => "application/x-www-form-urlencoded", "Authorization" => authorization_header })
