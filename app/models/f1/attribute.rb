@@ -17,6 +17,10 @@ module F1
       get!(base_url + "People/#{user_id}/Attributes.json")
     end
 
+    def delete_attribute_for(user_id, attribute_id)
+      delete!(base_url + "People/#{user_id}/Attributes/#{attribute_id}")
+    end
+
     def set_attrs
       @attrs = {
         "attribute" => {
