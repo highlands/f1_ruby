@@ -14,7 +14,7 @@ module F1
     end
 
     def get_requirements_for(user_id)
-      get!(base_url + "People/#{user_id}/Requirements.json")
+      get!(base_url + "People/#{user_id}/Requirements.json?recordsperpage=300")
     end
 
   end

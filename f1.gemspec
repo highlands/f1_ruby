@@ -18,7 +18,9 @@ Gem::Specification.new do |s|
 
   s.add_dependency "rails", ">= 4.0.0"
   s.add_dependency "haml", ">= 4.0.0"
-  s.add_dependency "excon", ">= 0.25.0"
+  # s.add_dependency "excon", ">= 0.25.0"
+  s.add_dependency "excon", ">= 0.54.0"
+  s.add_dependency "httparty"
   s.add_dependency "nested-hstore", ">= 0.1.2"
   s.add_development_dependency "sqlite3"
 

@@ -20,7 +20,6 @@ module F1
         @user_link = http_headers["Content-Location"]
         @errors = nil
       else
-        binding.pry
         @errors = resp.last
       end
     end

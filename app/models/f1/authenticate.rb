@@ -1,8 +1,9 @@
 module F1
   class Authenticate
     attr_accessor :oauth_token_secret, :oauth_token, :user_link, :errors, :test, :has_account
+    require 'httparty'
 
-    def initialize(username = nil, password = nil, test = (!Rails.env.production? && !Rails.env.staging?))
+    def initialize(username = nil, password = nil, test = false)
       @test = test
       user_type = username.match(/@/) && username.match(/\./) ? "WeblinkUser" : "PortalUser"
       url = base_url + "#{user_type}/AccessToken"
@@ -20,16 +21,14 @@ module F1
       url = base_url + "accounts.json"
       params["account"]["urlRedirect"] = redirect
       data = params.to_json
-      resp = Excon.post(url, :body => data, :headers => { "Content-Type" => "application/json", "Authorization" => request_header })
-      if resp.status == 204
+      #  resp = Excon.post(url, :body => data, :headers => { "Content-Type" => "application/json", "Authorization" => request_header })
+      resp = HTTParty.post(url, :body => data, :headers => { "Content-Type" => "application/json", "Authorization" => request_header })
+      if resp.code == 204
         @errors = nil
-        @reason = resp.reason_phrase
-      elsif resp.status == 409
+        @reason = "Successfully created user. Please check your email to complete registration." # resp.reason_phrase
+      elsif resp.code == 409
         @errors = "An account already exists for the email address you provided."
         @has_account = true
-        return false
-      elsif resp.reason_phrase.present?
-        @errors = resp.reason_phrase
         return false
       else
         @errors = "Connection Failed"
@@ -99,7 +98,7 @@ module F1
 
     def base_url
       if test
-        Excon.defaults[:ssl_verify_peer] = false
+        #Excon.defaults[:ssl_verify_peer] = false
         "https://#{ENV["F1_CODE"]}.staging.fellowshiponeapi.com/v1/"
       else
         "https://#{ENV["F1_CODE"]}.fellowshiponeapi.com/v1/"
@@ -107,25 +106,22 @@ module F1
     end
 
     def get!(url)
-      resp = Excon.get(url, :headers => { "Content-Type" => "application/json", "Authorization" => request_header })
-      if resp.status == 200
+      #  resp = Excon.get(url, :headers => { "Content-Type" => "application/json", "Authorization" => request_header })
+      resp = HTTParty.get(url, :headers => { "Content-Type" => "application/json", "Authorization" => request_header })
+      if resp.code == 200
         @errors = nil
         JSON.parse(resp.body)
-      elsif resp.reason_phrase.present?
-        @errors = resp.reason_phrase
       else
         @errors = "Connection Failed"
       end
     end
 
     def post!(url, data = nil)
-      resp = Excon.post(url, :body => data, :headers => { "Content-Type" => "application/json", "Authorization" => request_header })
-      if resp.status == 201
+      #  resp = Excon.post(url, :body => data, :headers => { "Content-Type" => "application/json", "Authorization" => request_header })
+      resp = HTTParty.post(url, :body => data, :headers => { "Content-Type" => "application/json", "Authorization" => request_header })
+      if resp.code == 201
         @errors = nil
-        @reason = resp.reason_phrase
-      elsif resp.reason_phrase.present?
-        @errors = resp.reason_phrase
-        return false
+        @reason = "Success" # resp.reason_phrase
       else
         @errors = "Connection Failed"
         return false
@@ -134,21 +130,30 @@ module F1
 
     # experimental for updating
     def put!(url, data = nil)
-      resp = Excon.put(url, :body => data, :headers => { "Content-Type" => "application/json", "Authorization" => request_header })
-      if resp.status == 201
+      #  resp = Excon.put(url, :body => data, :headers => { "Content-Type" => "application/json", "Authorization" => request_header })
+      resp = HTTParty.put(url, :body => data, :headers => { "Content-Type" => "application/json", "Authorization" => request_header })
+      if resp.code == 201
         @errors = nil
-        @reason = resp.reason_phrase
-      elsif resp.reason_phrase.present?
-        @errors = resp.reason_phrase
-        return false
+        @reason = "Success" # resp.reason_phrase
       else
         @errors = "Connection Failed"
         return false
       end
     end
 
+    def delete!(url)
+      resp = HTTParty.delete(url, :headers => { "Content-Type" => "application/json", "Authorization" => request_header })
+      if resp.code == 204
+        @errors = nil
+        JSON.parse(resp.body)
+      else
+        @errors = "Connection Failed"
+      end
+    end
+
     def post_auth!(url, data = nil)
-      resp = Excon.post(url, :body => data, :headers => { "Content-Type" => "application/x-www-form-urlencoded", "Authorization" => authorization_header })
+      #  resp = Excon.post(url, :body => data, :headers => { "Content-Type" => "application/x-www-form-urlencoded", "Authorization" => authorization_header })
+      resp = HTTParty.post(url, :body => data, :headers => { "Content-Type" => "application/x-www-form-urlencoded", "Authorization" => authorization_header })
       handle_auth_response(resp)
     end
 
@@ -162,7 +167,7 @@ module F1
     end
 
     def handle_auth_response(resp)
-      if resp.status == 200
+      if resp.code == 200
         if resp.headers["oauth_token"].present? && resp.headers["oauth_token_secret"].present?
           @oauth_token = resp.headers["oauth_token"]
           @oauth_token_secret = resp.headers["oauth_token_secret"]
@@ -172,8 +177,6 @@ module F1
         end
         @user_link = resp.headers["Content-Location"]
         @errors = nil
-      elsif resp.reason_phrase.present?
-        @errors = resp.reason_phrase
       else
         @errors = "Connection Failed"
       end
@@ -197,6 +200,10 @@ module F1
 
     def get_secret
       @test.present? ? ENV["F1_SECRET_STAGING"] + "%2526" : ENV["F1_SECRET"] + "%2526"
+    end
+
+    def reason_phrase(resp)
+      resp.headers["status"].gsub(/(\d{3} )/, "") rescue nil
     end
 
   end
