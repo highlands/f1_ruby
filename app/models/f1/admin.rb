@@ -1,4 +1,4 @@
 module F1
-  class Admin < User
+  class Admin < F1::User
   end
 end
